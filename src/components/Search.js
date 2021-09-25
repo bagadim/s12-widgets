@@ -14,24 +14,22 @@ export default function Search() {
     }, [term]);
 
     useEffect(() => {
-        const search = async () => {
-            const { data } = await axios.get(
-                'https://en.wikipedia.org/w/api.php',
-                {
-                    params: {
-                        action: 'query',
-                        list: 'search',
-                        origin: '*',
-                        format: 'json',
-                        srsearch: debouncedTerm
-                    }
-                }
-            );
-            setResults(data.query.search);
-        };
-        if (debouncedTerm) {
-            search();
+        if (!debouncedTerm) {
+            return;
         }
+        axios
+            .get('https://en.wikipedia.org/w/api.php', {
+                params: {
+                    action: 'query',
+                    list: 'search',
+                    origin: '*',
+                    format: 'json',
+                    srsearch: debouncedTerm
+                }
+            })
+            .then(({ data }) => {
+                setResults(data.query.search);
+            });
     }, [debouncedTerm]);
 
     const renderedResults = results.map((result) => {
