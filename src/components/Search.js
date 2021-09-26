@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import wikiApi from '../dataLayer/wikiApi';
 
 export default function Search() {
     const [term, setTerm] = useState('programming');
@@ -17,19 +17,9 @@ export default function Search() {
         if (!debouncedTerm) {
             return;
         }
-        axios
-            .get('https://en.wikipedia.org/w/api.php', {
-                params: {
-                    action: 'query',
-                    list: 'search',
-                    origin: '*',
-                    format: 'json',
-                    srsearch: debouncedTerm
-                }
-            })
-            .then(({ data }) => {
-                setResults(data.query.search);
-            });
+        wikiApi.search(debouncedTerm).then(({ data }) => {
+            setResults(data.query.search);
+        });
     }, [debouncedTerm]);
 
     const renderedResults = results.map((result) => {

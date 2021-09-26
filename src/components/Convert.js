@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import googleApi from '../dataLayer/googleApi.js';
 
 export default function Convert({ language, text }) {
     const [translated, setTranslated] = useState('');
@@ -14,21 +14,9 @@ export default function Convert({ language, text }) {
     }, [text]);
 
     useEffect(() => {
-        axios
-            .post(
-                'https://translation.googleapis.com/language/translate/v2',
-                {},
-                {
-                    params: {
-                        q: debouncedText,
-                        target: language.value,
-                        key: 'AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM'
-                    }
-                }
-            )
-            .then(({ data }) => {
-                setTranslated(data.data.translations[0].translatedText);
-            });
+        googleApi.translate(debouncedText, language.value).then(({ data }) => {
+            setTranslated(data.data.translations[0].translatedText);
+        });
     }, [language, debouncedText]);
     return (
         <div>

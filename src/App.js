@@ -3,8 +3,10 @@ import Accordion from './components/Accordion';
 import Dropdown from './components/Dropdown';
 import Search from './components/Search';
 import Translate from './components/Translate';
+import Route from './navigation/Route';
+import Header from './navigation/Header';
 
-const items = [
+const accordionItems = [
     {
         title: 'What is React?',
         content: 'React is a front end javascript library'
@@ -20,7 +22,7 @@ const items = [
     }
 ];
 
-const options = [
+const dropdownOptions = [
     {
         label: 'The Color Red',
         value: 'red'
@@ -34,20 +36,29 @@ const options = [
         value: 'blue'
     }
 ];
+
 export default function App() {
-    const [selectedColor, setSelectedColor] = useState(options[0]);
+    const [selectedColor, setSelectedColor] = useState(dropdownOptions[0]);
     return (
         <div>
-            <br />
-            {/* <Accordion items={items} /> */}
-            {/* <Search /> */}
-            {/* <Dropdown
-                label="Select Color"
-                options={options}
-                selected={selectedColor}
-                onSelectedChange={setSelectedColor}
-            /> */}
-            <Translate />
+            <Header />
+            <Route path="/">
+                <Accordion items={accordionItems} />
+            </Route>
+            <Route path="/search">
+                <Search />
+            </Route>
+            <Route path="/dropdown">
+                <Dropdown
+                    label="Select Color"
+                    options={dropdownOptions}
+                    selected={selectedColor}
+                    onSelectedChange={setSelectedColor}
+                />
+            </Route>
+            <Route path="/translate">
+                <Translate />
+            </Route>
         </div>
     );
 }
